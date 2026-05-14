@@ -1,0 +1,99 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "bb03e4fa2dc253ef1ca4",
+  "position": {
+    "x": 960,
+    "y": 144,
+    "z": 1000,
+    "height": 120,
+    "width": 272,
+    "tabOrder": 12000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "This interactive feature aggregates data from the Johns Hopkins Centers for Systems Science and Engineering (CSSE), state- and local-level public health agencies. County-level data is confirmed by referencing state and local agencies directly (",
+                    "textStyle": {
+                      "fontSize": "8pt",
+                      "color": "#999999"
+                    }
+                  },
+                  {
+                    "value": "link",
+                    "textStyle": {
+                      "fontSize": "8pt",
+                      "color": "#999999"
+                    },
+                    "url": "https://www.cdc.gov/publichealthgateway/healthdirectories/healthdepartments.html"
+                  },
+                  {
+                    "value": ").",
+                    "textStyle": {
+                      "fontSize": "8pt",
+                      "color": "#999999"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Methodology'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "'8'"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'''Segoe UI Bold'', wf_segoe-ui_bold, helvetica, arial, sans-serif'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#999999'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

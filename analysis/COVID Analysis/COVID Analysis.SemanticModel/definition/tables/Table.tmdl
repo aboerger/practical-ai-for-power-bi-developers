@@ -1,0 +1,55 @@
+table Table
+	isHidden
+	lineageTag: 3b5672d3-4e52-4956-9be9-6e1a51b4695b
+
+	measure Methodology =
+			"This interactive feature aggregates data from the Johns Hopkins Center for Systems Science and Engineering (CSSE), state- and local-level public health agencies. County-level data is confirmed by referencing state and local agencies directly.
+			
+			Source: John Hopkins Center for Systems Science and Engineering (CSSE)"
+		isHidden
+		lineageTag: e8659ba1-98d7-47f0-ac8d-47b49843bada
+
+		changedProperty = IsHidden
+
+	measure 'Terms of use' = "This report and data are provided " & """" & "as is" & """" & ", " & """" & "with all faults" & """" & ", and without warranty of any kind. Microsoft gives no express warranties or guarantees and expressly disclaims all implied warranties, including merchantability, fitness for a particular purpose, and non-infringement."
+		isHidden
+		lineageTag: dc3cb1f4-fa1b-4bd3-bdf6-fbd87b39fb3b
+
+		changedProperty = IsHidden
+
+	column Metric
+		dataType: string
+		isHidden
+		lineageTag: b1375403-c121-4667-b42d-b3e6c7376026
+		summarizeBy: none
+		sourceColumn: Metric
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Order
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8e211fb9-5c22-44c9-b649-e2e612d72c7e
+		summarizeBy: sum
+		sourceColumn: Order
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Table-014a30af-502f-48fd-98ad-986611bf42ec = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45Wcs7PS8ssyk1NUXBOLE4tVtJRMlSK1YlWcklNLMkAcY3AXJCkgltiSWJOZkmlQlBiSSpQylgpNhYA", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type text) meta [Serialized.Text = true]) in type table [Metric = _t, Order = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Metric", type text}, {"Order", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Table
+

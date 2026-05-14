@@ -1,0 +1,73 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 318.8,
+            "y": 329
+          },
+          "nodeIndex": "COVID",
+          "size": {
+            "height": 396,
+            "width": 261
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 435.5,
+            "y": 0
+          },
+          "nodeIndex": "COVID measures",
+          "nodeLineageTag": "9f681416-7364-466e-8d62-c4b5606c65be",
+          "size": {
+            "height": 199,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 858.5,
+            "y": 372
+          },
+          "nodeIndex": "StateDim",
+          "nodeLineageTag": "2151a01d-b81d-4eaf-823a-87e191f6b6eb",
+          "size": {
+            "height": 233,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 1.2999999999999545,
+            "y": 0
+          },
+          "nodeIndex": "Table",
+          "nodeLineageTag": "3b5672d3-4e52-4956-9be9-6e1a51b4695b",
+          "size": {
+            "height": 194,
+            "width": 234
+          },
+          "zIndex": 4
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

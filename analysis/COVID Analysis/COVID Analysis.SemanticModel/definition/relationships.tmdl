@@ -1,0 +1,9 @@
+relationship 51183f6d-caa4-4bf9-ae38-3b205dc1ec6f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: COVID.Date
+	toColumn: LocalDateTable_d10bc129-7e77-4c5a-b3dd-b8487b54dfe3.Date
+
+relationship 40c24e68-e1a2-4062-896d-ba99d7fd1558
+	fromColumn: COVID.StateFIPS
+	toColumn: StateDim.StateFIPS
+

@@ -1,0 +1,155 @@
+table COVID
+	lineageTag: a755fb70-618a-4549-98cd-b83e7f602006
+
+	measure Updated = "Data provided by Johns Hopkins. Because of the frequency of data upates, they may not reflect the exact numbers reported by government organizations or the news media. For more information or to download the data, please click the logo below.  Data updated through " & FORMAT([Max date],"mmmm dd, yyyy") & "."
+		lineageTag: ecd7259c-c19b-4a27-a726-844b3356d8fd
+
+	measure 'Max date' = CALCULATE(MAX('COVID'[Date]),ALL('COVID'))
+		formatString: General Date
+		isHidden
+		lineageTag: 91921841-1a89-445e-913c-f510c38840b7
+
+	column 'County Name'
+		dataType: string
+		lineageTag: 73278cdd-5af8-4327-a50b-317152db0a12
+		summarizeBy: none
+		sourceColumn: County Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column FIPS
+		dataType: string
+		lineageTag: a0a505be-6fdb-4b95-8895-a06c68778f69
+		summarizeBy: none
+		sourceColumn: FIPS
+
+		annotation SummarizationSetBy = Automatic
+
+	column County = 'COVID'[County Name] & ", " & RELATED('StateDim'[State])
+		lineageTag: 35e04fd9-50d7-4b81-8c21-8ac5bf177a69
+		dataCategory: County
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Daily cases' = ```
+			
+			VAR __CountyName = 'COVID'[County Name]
+			VAR __State = 'COVID'[StateFIPS]
+			VAR __Yesterday =  DATEADD(COVID[Date],-1,DAY)
+			VAR __TodaysCases = 'COVID'[Cases]
+			
+			RETURN  __TodaysCases - CALCULATE(
+			    SUM('COVID'[Cases]) , 
+			    FILTER(
+			        COVID, 
+			        COVID[Date] = __Yesterday &&
+			        COVID[County Name] = __CountyName &&
+			        COVID[StateFIPS] = __State
+			    )
+			) + 0
+			```
+		formatString: #,0
+		lineageTag: 3c76fd35-d104-4568-a162-a19dd8b49769
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Daily deaths' = ```
+			
+			VAR __CountyName = 'COVID'[County Name]
+			VAR __State = 'COVID'[StateFIPS]
+			VAR __Yesterday =  DATEADD(COVID[Date],-1,DAY)
+			VAR __TodaysDeaths = 'COVID'[Deaths]
+			
+			RETURN  __TodaysDeaths - CALCULATE(
+			    SUM('COVID'[Deaths]) , 
+			    FILTER(
+			        COVID, 
+			        COVID[Date] = __Yesterday &&
+			        COVID[County Name] = __CountyName &&
+			        COVID[StateFIPS] = __State
+			    )
+			) + 0
+			```
+		formatString: 0
+		lineageTag: c1c4daa6-19fb-4cf0-86b0-294c7c800f02
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column StateFIPS
+		dataType: string
+		lineageTag: d08434c4-91de-4bdd-b824-718920a19dbf
+		summarizeBy: none
+		sourceColumn: StateFIPS
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 07f0e4d6-2ee0-42ba-9f6d-b43c5a359119
+		summarizeBy: none
+		sourceColumn: Date
+
+		variation Variation
+			isDefault
+			relationship: 51183f6d-caa4-4bf9-ae38-3b205dc1ec6f
+			defaultHierarchy: LocalDateTable_d10bc129-7e77-4c5a-b3dd-b8487b54dfe3.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Cases
+		dataType: int64
+		formatString: 0
+		lineageTag: e974bb34-a47a-4ea3-92e8-2ec17191ab5b
+		summarizeBy: sum
+		sourceColumn: Cases
+
+		annotation SummarizationSetBy = Automatic
+
+	column Deaths
+		dataType: int64
+		formatString: 0
+		lineageTag: e4b6b2fd-1197-49c3-acd9-86d76d77dfda
+		summarizeBy: sum
+		sourceColumn: Deaths
+
+		annotation SummarizationSetBy = Automatic
+
+	partition COVID-2e509512-c6a9-426c-b8d3-3b5c4542fa79 = m
+		mode: import
+		source = ```
+				let
+				  #"Date Range" = Calendar_Raw,
+				  #"Added Custom Column" = Table.AddColumn(#"Date Range", "Report", each Text.Combine({
+				    Date.ToText([Calendar Date], "MM"), 
+				    "-", 
+				    Date.ToText([Calendar Date], "dd"), 
+				    "-", 
+				    Date.ToText([Calendar Date], "yyyy"), 
+				    ".csv"
+				  }), type text),
+				  #"Invoked Custom Function" = Table.AddColumn(
+				    #"Added Custom Column", 
+				    "fxGetReportDetails", 
+				    each fxGetReportDetails([Report])
+				  ),
+				  #"Removed Columns" = Table.RemoveColumns(#"Invoked Custom Function", {"Report"}),
+				  #"Removed Errors" = Table.RemoveRowsWithErrors(#"Removed Columns", {"fxGetReportDetails"}),
+				  #"Expanded fxGetReportDetails" = Table.ExpandTableColumn(#"Removed Errors", "fxGetReportDetails", {"FIPS", "Confirmed", "Deaths"}, {"FIPS", "Confirmed", "Deaths"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Expanded fxGetReportDetails",{{"Calendar Date", type date}, {"FIPS",type text}, {"Confirmed", Int64.Type}, {"Deaths", Int64.Type}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"Confirmed", "Cases"}, {"Calendar Date", "Date"}}),
+				    #"Merged Queries" = Table.NestedJoin(#"Renamed Columns", {"FIPS"}, #"US Counties", {"FIPS"}, "US Counties", JoinKind.Inner),
+				    #"Expanded US Counties" = Table.ExpandTableColumn(#"Merged Queries", "US Counties", {"County Name", "StateFIPS"}, {"County Name", "StateFIPS"})
+				in
+				    #"Expanded US Counties"
+				```
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
