@@ -1,0 +1,205 @@
+cultureInfo es-ES
+	translations
+		model Model
+			caption: Modelo
+			table COVID
+				caption: COVID
+				column 'County Name'
+					caption: Nombre del condado
+				column FIPS
+					caption: FIPS
+				column County
+					caption: Condado
+				column 'Daily cases'
+					caption: Casos diarios
+				column 'Daily deaths'
+					caption: Muertes diarias
+				column StateFIPS
+					caption: FIPS del estado
+				column Date
+					caption: Fecha
+				column Cases
+					caption: Casos
+				column Deaths
+					caption: Muertes
+				measure Updated
+					caption: Actualizado
+				measure 'Max date'
+					caption: Fecha maxima
+			table StateDim
+				caption: Estados
+				column State
+					caption: Estado
+				column 'State code'
+					caption: Codigo del estado
+				column 'US territories'
+					caption: Territorios de EE. UU.
+				column Country
+					caption: Pais
+				column StateFIPS
+					caption: FIPS del estado
+				measure 'Drill-through button text'
+					caption: Texto del boton de exploracion
+			table Table
+				caption: Informacion
+				column Metric
+					caption: Metrica
+				column Order
+					caption: Orden
+				measure Methodology
+					caption: Metodologia
+				measure 'Terms of use'
+					caption: Terminos de uso
+			table 'COVID measures'
+				caption: Medidas de COVID
+				measure 'Total confirmed cases'
+					caption: Total de casos confirmados
+				measure 'Total deaths'
+					caption: Total de muertes
+				measure 'Case fatality rate'
+					caption: Tasa de letalidad
+				measure 'Confirmed cases'
+					caption: Casos confirmados
+				measure Deaths
+					caption: Muertes
+			table Calendar
+				caption: Calendario
+				column Date
+					caption: Fecha
+				column Year
+					caption: Año
+				column MonthNo
+					caption: Numero de mes
+				column Month
+					caption: Mes
+				column QuarterNo
+					caption: Numero de trimestre
+				column Quarter
+					caption: Trimestre
+				column Day
+					caption: Dia
+				hierarchy 'Date Hierarchy'
+					caption: Jerarquia de fechas
+					level Year
+						caption: Año
+					level Quarter
+						caption: Trimestre
+					level Month
+						caption: Mes
+					level Day
+						caption: Dia
+
+	linguisticMetadata =
+			{
+			  "Version": "2.0.0",
+			  "Language": "es-ES",
+			  "Entities": {
+			    "covid_measures.total_deaths": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "COVID measures",
+			          "ConceptualProperty": "Total deaths"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Total de muertes": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "covid_measures.case_fatality_rate": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "COVID measures",
+			          "ConceptualProperty": "Case fatality rate"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Tasa de letalidad": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "covid_measures.total_confirmed_cases": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "COVID measures",
+			          "ConceptualProperty": "Total confirmed cases"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Total de casos confirmados": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "statedim.country": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "StateDim",
+			          "ConceptualProperty": "Country"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Pais": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "statedim.state": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "StateDim",
+			          "ConceptualProperty": "State"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Estado": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    }
+			  }
+			}
+		contentType: json
+

@@ -14,18 +14,18 @@ queryGroup 'Data References'
 
 	annotation PBI_QueryGroupOrder = 1
 
-annotation __PBI_TimeIntelligenceEnabled = 1
+annotation __PBI_TimeIntelligenceEnabled = 0
 
 annotation PBI_QueryOrder = ["COVID","StateDim","Table","COVID measures","US Counties","Calendar_Raw","Start Date","fxGetReportDetails","fxCountryCorrections"]
 
 annotation PBI_ProTooling = ["DevMode","TMDL-Extension","DaxQueryView_Desktop"]
 
-ref table DateTableTemplate_fe7eb183-f12b-4c88-bb89-cfaa7f88e1df
 ref table COVID
 ref table StateDim
 ref table Table
 ref table 'COVID measures'
-ref table LocalDateTable_d10bc129-7e77-4c5a-b3dd-b8487b54dfe3
+ref table Calendar
 
 ref cultureInfo en-US
+ref cultureInfo es-ES
 

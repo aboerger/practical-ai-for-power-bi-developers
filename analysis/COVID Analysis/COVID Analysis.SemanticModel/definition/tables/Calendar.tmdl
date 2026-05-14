@@ -1,0 +1,91 @@
+table Calendar
+	showAsVariationsOnly
+	lineageTag: 7e65a1f6-7834-4a93-8558-f6be7cf4b4f5
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: Long Date
+		lineageTag: b96af1f9-8bb0-4d57-9e9d-a8f58ab4bfbb
+		summarizeBy: none
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = User
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Year = YEAR([Date])
+		lineageTag: 45eac0fe-a6a2-4b63-bd50-5a2521ba4c92
+		dataCategory: Years
+		summarizeBy: none
+
+		annotation SummarizationSetBy = User
+
+	column MonthNo = MONTH([Date])
+		isHidden
+		formatString: 0
+		lineageTag: 4e3528f1-b17a-42fe-b909-8c4312166501
+		dataCategory: MonthOfYear
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = User
+
+	column Month = FORMAT([Date], "MMMM")
+		lineageTag: 85d1ff22-6ed8-4415-948f-5f0eb5f1db03
+		dataCategory: Months
+		summarizeBy: none
+		sortByColumn: MonthNo
+
+		annotation SummarizationSetBy = User
+
+	column QuarterNo = INT(([MonthNo] + 2) / 3)
+		isHidden
+		formatString: 0
+		lineageTag: 0eb17469-e122-4543-b677-4f15d349bbdc
+		dataCategory: QuarterOfYear
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = User
+
+	column Quarter = "Qtr " & [QuarterNo]
+		lineageTag: 8c1416e4-fba4-4125-9d65-e2758232615f
+		dataCategory: Quarters
+		summarizeBy: none
+		sortByColumn: QuarterNo
+
+		annotation SummarizationSetBy = User
+
+	column Day = DAY([Date])
+		formatString: 0
+		lineageTag: 411bcb7c-f1d7-46eb-af77-e23572c512dd
+		dataCategory: DayOfMonth
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = User
+
+	hierarchy 'Date Hierarchy'
+		lineageTag: 57a5fcbc-8c5b-4e67-a703-7b0f4d0fc1a6
+
+		level Year
+			lineageTag: efd7db8f-8b79-4819-8c8f-4f0515aa3348
+			column: Year
+
+		level Quarter
+			lineageTag: 05487a75-36e1-4355-9b31-d3a31d353cfc
+			column: Quarter
+
+		level Month
+			lineageTag: 2e0345ce-948b-4e35-831c-f8a3df1d5790
+			column: Month
+
+		level Day
+			lineageTag: 7e29a5df-29c4-43f2-b9d6-ae17e3d00870
+			column: Day
+
+	partition Calendar-d1e26952-934c-44bb-93f2-4cdbb82336b8 = calculated
+		mode: import
+		source = CALENDAR(DATE(YEAR(MIN('COVID'[Date])), 1, 1), DATE(YEAR(MAX('COVID'[Date])), 12, 31))
+
+	annotation DefaultItem = DateHierarchy
+

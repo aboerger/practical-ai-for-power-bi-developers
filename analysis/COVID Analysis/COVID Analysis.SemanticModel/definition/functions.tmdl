@@ -2829,23 +2829,23 @@ function 'Schema.ANY.Tests' =
 		() =>
 		    UNION(
 		        PQL.Assert.Tbl.ShouldExist("COVID table exists", "COVID"),
+		        PQL.Assert.Tbl.ShouldExist("Calendar table exists", "Calendar"),
 		        PQL.Assert.Tbl.ShouldExist("StateDim table exists", "StateDim"),
 		        PQL.Assert.Tbl.ShouldExist("COVID measures table exists", "COVID measures"),
-		        PQL.Assert.Tbl.ShouldExist("Date template table exists", "DateTableTemplate_fe7eb183-f12b-4c88-bb89-cfaa7f88e1df"),
-		        PQL.Assert.Tbl.ShouldExist("Local date table exists", "LocalDateTable_d10bc129-7e77-4c5a-b3dd-b8487b54dfe3"),
 		        PQL.Assert.Tbl.ShouldExist("Helper table exists", "Table"),
 		        PQL.Assert.Tbl.ShouldHaveRows("COVID table has rows", COVID),
+		        PQL.Assert.Tbl.ShouldHaveRows("Calendar table has rows", Calendar),
 		        PQL.Assert.Tbl.ShouldHaveRows("StateDim table has rows", StateDim),
 		        PQL.Assert.Tbl.ShouldHaveRows("Helper table has rows", 'Table'),
 		        PQL.Assert.Tbl.ShouldHaveColumns("COVID table has required columns", "COVID", "County Name,FIPS,County,Daily cases,Daily deaths,StateFIPS,Date,Cases,Deaths"),
+		        PQL.Assert.Tbl.ShouldHaveColumns("Calendar table has required columns", "Calendar", "Date,Year,MonthNo,Month,QuarterNo,Quarter,Day"),
 		        PQL.Assert.Tbl.ShouldHaveColumns("StateDim table has required columns", "StateDim", "State,State code,US territories,Country,StateFIPS"),
-		        PQL.Assert.Tbl.ShouldHaveColumns("Date template has required columns", "DateTableTemplate_fe7eb183-f12b-4c88-bb89-cfaa7f88e1df", "Date,Year,MonthNo,Month,QuarterNo,Quarter,Day"),
-		        PQL.Assert.Tbl.ShouldHaveColumns("Local date table has required columns", "LocalDateTable_d10bc129-7e77-4c5a-b3dd-b8487b54dfe3", "Date,Year,MonthNo,Month,QuarterNo,Quarter,Day"),
 		        PQL.Assert.Tbl.ColumnDataTypeShouldBe("COVID Date is date", "COVID", "Date", "Date"),
+		        PQL.Assert.Tbl.ColumnDataTypeShouldBe("Calendar Date is date", "Calendar", "Date", "Date"),
 		        PQL.Assert.Tbl.ColumnDataTypeShouldBe("COVID Cases is integer", "COVID", "Cases", "Integer"),
 		        PQL.Assert.Tbl.ColumnDataTypeShouldBe("COVID Deaths is integer", "COVID", "Deaths", "Integer"),
 		        PQL.Assert.Tbl.ColumnDataTypeShouldBe("StateDim StateFIPS is text", "StateDim", "StateFIPS", "Text"),
-		        PQL.Assert.Relationship.ShouldExist("COVID Date rolls up to local date table", "COVID", "Date", "LocalDateTable_d10bc129-7e77-4c5a-b3dd-b8487b54dfe3", "Date"),
+		        PQL.Assert.Relationship.ShouldExist("COVID Date rolls up to Calendar", "COVID", "Date", "Calendar", "Date"),
 		        PQL.Assert.Relationship.ShouldExist("COVID StateFIPS relates to StateDim", "COVID", "StateFIPS", "StateDim", "StateFIPS")
 		    )
 	lineageTag: 8dde4c19-31a2-40e1-a597-345a013cdb94

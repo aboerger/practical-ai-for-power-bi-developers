@@ -1,0 +1,8 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "a58270e4b30cad6e",
+  "displayName": "Top 10 State Death Trends",
+  "width": 1280,
+  "height": 720,
+  "displayOption": "FitToPage"
+}
