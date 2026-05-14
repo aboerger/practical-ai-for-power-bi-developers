@@ -18,7 +18,7 @@ annotation __PBI_TimeIntelligenceEnabled = 1
 
 annotation PBI_QueryOrder = ["COVID","StateDim","Table","COVID measures","US Counties","Calendar_Raw","Start Date","fxGetReportDetails","fxCountryCorrections"]
 
-annotation PBI_ProTooling = ["DevMode","TMDL-Extension"]
+annotation PBI_ProTooling = ["DevMode","TMDL-Extension","DaxQueryView_Desktop"]
 
 ref table DateTableTemplate_fe7eb183-f12b-4c88-bb89-cfaa7f88e1df
 ref table COVID

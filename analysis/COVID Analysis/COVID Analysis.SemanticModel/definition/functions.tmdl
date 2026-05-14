@@ -2824,3 +2824,71 @@ function 'PQL.Assert.Tbl.ColumnDataTypeShouldBe' =
 
 	annotation DAXLIB_PackageVersion = 0.3.0
 
+/// Production baseline schema and relationship checks for the COVID model.
+function 'Schema.ANY.Tests' =
+		() =>
+		    UNION(
+		        PQL.Assert.Tbl.ShouldExist("COVID table exists", "COVID"),
+		        PQL.Assert.Tbl.ShouldExist("StateDim table exists", "StateDim"),
+		        PQL.Assert.Tbl.ShouldExist("COVID measures table exists", "COVID measures"),
+		        PQL.Assert.Tbl.ShouldExist("Date template table exists", "DateTableTemplate_fe7eb183-f12b-4c88-bb89-cfaa7f88e1df"),
+		        PQL.Assert.Tbl.ShouldExist("Local date table exists", "LocalDateTable_d10bc129-7e77-4c5a-b3dd-b8487b54dfe3"),
+		        PQL.Assert.Tbl.ShouldExist("Helper table exists", "Table"),
+		        PQL.Assert.Tbl.ShouldHaveRows("COVID table has rows", COVID),
+		        PQL.Assert.Tbl.ShouldHaveRows("StateDim table has rows", StateDim),
+		        PQL.Assert.Tbl.ShouldHaveRows("Helper table has rows", 'Table'),
+		        PQL.Assert.Tbl.ShouldHaveColumns("COVID table has required columns", "COVID", "County Name,FIPS,County,Daily cases,Daily deaths,StateFIPS,Date,Cases,Deaths"),
+		        PQL.Assert.Tbl.ShouldHaveColumns("StateDim table has required columns", "StateDim", "State,State code,US territories,Country,StateFIPS"),
+		        PQL.Assert.Tbl.ShouldHaveColumns("Date template has required columns", "DateTableTemplate_fe7eb183-f12b-4c88-bb89-cfaa7f88e1df", "Date,Year,MonthNo,Month,QuarterNo,Quarter,Day"),
+		        PQL.Assert.Tbl.ShouldHaveColumns("Local date table has required columns", "LocalDateTable_d10bc129-7e77-4c5a-b3dd-b8487b54dfe3", "Date,Year,MonthNo,Month,QuarterNo,Quarter,Day"),
+		        PQL.Assert.Tbl.ColumnDataTypeShouldBe("COVID Date is date", "COVID", "Date", "Date"),
+		        PQL.Assert.Tbl.ColumnDataTypeShouldBe("COVID Cases is integer", "COVID", "Cases", "Integer"),
+		        PQL.Assert.Tbl.ColumnDataTypeShouldBe("COVID Deaths is integer", "COVID", "Deaths", "Integer"),
+		        PQL.Assert.Tbl.ColumnDataTypeShouldBe("StateDim StateFIPS is text", "StateDim", "StateFIPS", "Text"),
+		        PQL.Assert.Relationship.ShouldExist("COVID Date rolls up to local date table", "COVID", "Date", "LocalDateTable_d10bc129-7e77-4c5a-b3dd-b8487b54dfe3", "Date"),
+		        PQL.Assert.Relationship.ShouldExist("COVID StateFIPS relates to StateDim", "COVID", "StateFIPS", "StateDim", "StateFIPS")
+		    )
+	lineageTag: 8dde4c19-31a2-40e1-a597-345a013cdb94
+
+/// Production-safe data quality checks for core fact and dimension columns.
+function 'DataQuality.PROD.Tests' =
+		() =>
+		    UNION(
+		        PQL.Assert.Tbl.ShouldHaveMoreRowsThan("COVID fact table has production volume", 1000, COVID),
+		        PQL.Assert.Tbl.ShouldHaveMoreRowsThan("StateDim has expected state coverage", 40, StateDim),
+		        PQL.Assert.Col.NullRateShouldBeAtMost("COVID Date has no nulls", COVID[Date], 0),
+		        PQL.Assert.Col.NullOrBlankRateShouldBeAtMost("COVID StateFIPS is fully populated", COVID[StateFIPS], 0),
+		        PQL.Assert.Col.NullOrBlankRateShouldBeAtMost("COVID County Name is fully populated", COVID[County Name], 0),
+		        PQL.Assert.Col.NullOrBlankRateShouldBeAtMost("COVID County is fully populated", COVID[County], 0),
+		        PQL.Assert.Col.NullOrBlankRateShouldBeAtMost("StateDim State is fully populated", StateDim[State], 0),
+		        PQL.Assert.Col.NullOrBlankRateShouldBeAtMost("StateDim State code is fully populated", StateDim[State code], 0),
+		        PQL.Assert.Col.ShouldBeDistinct("StateDim StateFIPS is unique", StateDim[StateFIPS]),
+		        PQL.Assert.Col.ShouldBeDistinct("StateDim State is unique", StateDim[State]),
+		        PQL.Assert.Col.DistinctCountShouldBeAtLeast("COVID retains broad county coverage", COVID[County], 1000),
+		        PQL.Assert.Col.ShouldBeNonNegative("COVID Cases stay non-negative", COVID[Cases]),
+		        PQL.Assert.Col.ShouldBeNonNegative("COVID Deaths stay non-negative", COVID[Deaths]),
+		        PQL.Assert.Col.NullRateShouldBeAtMost("COVID Daily cases stays populated", COVID[Daily cases], 0),
+		        PQL.Assert.Col.NullRateShouldBeAtMost("COVID Daily deaths stays populated", COVID[Daily deaths], 0),
+		        PQL.Assert.Col.DistinctCountShouldBeAtLeast("StateDim keeps broad state coverage", StateDim[State], 40)
+		    )
+	lineageTag: a4093cae-1b59-4628-81f5-77fb2a4dbb4f
+
+/// Stable measure and calculated output checks for the current production baseline.
+function 'BusinessLogic.PROD.Tests' =
+		() =>
+		    UNION(
+		        PQL.Assert.ShouldNotBeNull("Max date measure returns a value", [Max date]),
+		        PQL.Assert.ShouldEqual("Max date measure matches fact max date", CALCULATE(MAX(COVID[Date]), ALL(COVID)), [Max date]),
+		        PQL.Assert.ShouldEqual("Confirmed cases measure matches base column sum", SUM(COVID[Cases]), [Confirmed cases]),
+		        PQL.Assert.ShouldEqual("Deaths measure matches base column sum", SUM(COVID[Deaths]), [Deaths]),
+		        PQL.Assert.ShouldEqual("Total confirmed cases measure matches daily cases sum", SUM(COVID[Daily cases]), [Total confirmed cases]),
+		        PQL.Assert.ShouldEqual("Total deaths measure matches daily deaths sum", SUM(COVID[Daily deaths]), [Total deaths]),
+		        PQL.Assert.ShouldEqual("Case fatality rate measure matches its formula", DIVIDE([Total deaths], [Total confirmed cases]), [Case fatality rate]),
+		        PQL.Assert.ShouldBeBetween("Case fatality rate stays between zero and one", 0, 1, [Case fatality rate]),
+		        PQL.Assert.ShouldStartWith("Drill-through button text keeps expected prompt", "Click", [Drill-through button text]),
+		        PQL.Assert.ShouldContainString("Updated measure retains source attribution", "Johns Hopkins", [Updated]),
+		        PQL.Assert.ShouldContainString("Methodology measure retains CSSE attribution", "Center for Systems Science and Engineering", [Methodology]),
+		        PQL.Assert.ShouldContainString("Terms of use retains as-is language", "as is", [Terms of use])
+		    )
+	lineageTag: cdb0aea6-0207-4489-90f8-83df721c2485
+
