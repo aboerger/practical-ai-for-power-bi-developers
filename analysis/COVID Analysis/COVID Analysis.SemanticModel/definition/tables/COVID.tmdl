@@ -96,7 +96,7 @@ table COVID
 		variation Variation
 			isDefault
 			relationship: 51183f6d-caa4-4bf9-ae38-3b205dc1ec6f
-			defaultHierarchy: LocalDateTable_d10bc129-7e77-4c5a-b3dd-b8487b54dfe3.'Date Hierarchy'
+			defaultHierarchy: Calendar.'Date Hierarchy'
 
 		annotation SummarizationSetBy = Automatic
 

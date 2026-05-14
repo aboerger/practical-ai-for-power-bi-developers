@@ -1,0 +1,6 @@
+EVALUATE
+UNION(
+    Schema.ANY.Tests(),
+    DataQuality.PROD.Tests(),
+    BusinessLogic.PROD.Tests()
+)
