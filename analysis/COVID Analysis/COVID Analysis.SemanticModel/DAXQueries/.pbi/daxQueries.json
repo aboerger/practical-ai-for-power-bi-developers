@@ -6,8 +6,7 @@
     "Run.PROD.Tests",
     "Schema.ANY.Tests",
     "DataQuality.PROD.Tests",
-    "BusinessLogic.PROD.Tests",
-    "Query 4"
+    "BusinessLogic.PROD.Tests"
   ],
   "defaultTab": "Run.PROD.Tests"
 }
